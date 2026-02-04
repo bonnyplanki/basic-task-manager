@@ -1,0 +1,62 @@
+<%- include("layout", { body: `
+<form method="POST" action="/tasks">
+  <input name="title" placeholder="Task title" required />
+  <input name="description" placeholder="Description" />
+  <select name="priority">
+    <option>High</option>
+    <option selected>Medium</option>
+    <option>Low</option>
+  </select>
+  <button>Add</button>
+</form>
+
+<ul style="list-style: none; padding-left: 0;">
+  ${tasks.map(t => `
+    <li style="margin: 12px 0; padding: 10px; border: 1px solid #444; border-radius: 10px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+        <div style="flex: 1;">
+          <div style="font-weight:700; font-size:16px;">
+            <span style="${t.status === "Done" ? "text-decoration:line-through;opacity:0.6;" : ""}">
+              ${t.title}
+            </span>
+            <span style="
+              margin-left:10px;
+              padding:2px 10px;
+              border-radius:999px;
+              border:1px solid #666;
+              font-size:12px;
+              ${t.priority === "High" ? "color:rgb(255,80,80);border-color:rgb(255,80,80);" : ""}
+              ${t.priority === "Medium" ? "color:rgb(255,255,0);border-color:rgb(255,255,0);" : ""}
+              ${t.priority === "Low" ? "color:rgb(0,255,180);border-color:rgb(0,255,180);" : ""}
+            ">
+              ${t.priority}
+            </span>
+            <span style="margin-left:8px; font-size:12px; opacity:0.8;">
+              ${t.status}
+            </span>
+          </div>
+          ${t.description ? `<div style="margin-top:6px; opacity:0.85;">${t.description}</div>` : ""}
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px;">
+          <form method="POST" action="/tasks/${t.id}/toggle?_method=PATCH" style="display:inline; margin:0;">
+            <button style="border:none;background:none;font-size:20px;cursor:pointer;">
+              ${t.status === "Done" ? "❌" : "✅"}
+            </button>
+          </form>
+
+          <a href="/tasks/${t.id}/edit" style="text-decoration:none; padding:6px 10px; border:1px solid #666; border-radius:8px;">
+            Edit
+          </a>
+
+          <form method="POST" action="/tasks/${t.id}?_method=DELETE" style="display:inline; margin:0;" onsubmit="return confirm('Delete task?')">
+            <button style="padding:6px 10px; border:1px solid #666; border-radius:8px; cursor:pointer;">
+              Delete
+            </button>
+          </form>
+        </div>
+      </div>
+    </li>
+  `).join("")}
+</ul>
+`}) %>

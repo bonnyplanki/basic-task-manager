@@ -1,0 +1,12 @@
+<%- include("layout", { body: `
+<form method="POST" action="/tasks/${task.id}?_method=PUT">
+  <input name="title" value="${task.title}" required />
+  <input name="description" value="${task.description}" />
+  <select name="priority">
+    <option ${task.priority==="High"?"selected":""}>High</option>
+    <option ${task.priority==="Medium"?"selected":""}>Medium</option>
+    <option ${task.priority==="Low"?"selected":""}>Low</option>
+  </select>
+  <button>Save</button>
+</form>
+`}) %>
